@@ -1,0 +1,459 @@
+.----------------------------------------------------------------------------------------.
+| OPCODE     | ASSEMBLY                         | C 1 P Z S O D V T I U PL | EXCEPTIONS  |
+|----------------------------------------------------------------------------------------|
+| 00         | ADD  BYTE R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 01         | ADD  HALF R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 02         | ADD  WORD R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 03         | ADD  LONG R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 04         | ADC  BYTE R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 05         | ADC  HALF R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 06         | ADC  WORD R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 07         | ADC  LONG R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 08         | SUB  BYTE R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 09         | SUB  HALF R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 0A         | SUB  WORD R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 0B         | SUB  LONG R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 0C         | SBB  BYTE R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 0D         | SBB  HALF R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 0E         | SBB  WORD R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 0F         | SBB  LONG R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 10         | AND  BYTE R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 11         | AND  HALF R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 12         | AND  WORD R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 13         | AND  LONG R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 14         | OR   BYTE R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 15         | OR   HALF R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 16         | OR   WORD R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 17         | OR   LONG R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 18         | XOR  BYTE R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 19         | XOR  HALF R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 1A         | XOR  WORD R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 1B         | XOR  LONG R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 1C         | SHL  BYTE R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 1D         | SHL  HALF R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 1E         | SHL  WORD R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 1F         | SHL  LONG R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 20         | SHR  BYTE R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 21         | SHR  HALF R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 22         | SHR  WORD R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 23         | SHR  LONG R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 24         | SAR  BYTE R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 25         | SAR  HALF R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 26         | SAR  WORD R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 27         | SAR  LONG R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 28         | JAF       R[A],             I-20 | - - - - - - - - - - - -- |             |
+| 29         | JAF  NEAR R[A],             I-20 | - - - - - - - - - - - -- |             |
+| 2A         | JMP       R[A], R[B],       I-16 | - - - - - - - - - - - -- |             |
+| 2B         | JMP  NEAR R[A], R[B],       I-16 | - - - - - - - - - - - -- |             |
+| 2C         | J[C]      R[A], R[B],       I-12 | - - - - - - - - - - - -- |             |
+| 2D         | J[C] NEAR R[A], R[B],       I-12 | - - - - - - - - - - - -- |             |
+| 2E         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 2F         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 30         | ROL  BYTE R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 31         | ROL  HALF R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 32         | ROL  WORD R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 33         | ROL  LONG R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 34         | RCL  BYTE R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 35         | RCL  HALF R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 36         | RCL  WORD R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 37         | RCL  LONG R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 38         | ROR  BYTE R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 39         | ROR  HALF R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 3A         | ROR  WORD R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 3B         | ROR  LONG R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 3C         | RCR  BYTE R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 3D         | RCR  HALF R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 3E         | RCR  WORD R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 3F         | RCR  LONG R[A], R[B], R[C], I-12 | C - P Z S - - - - - - -- |             |
+| 40         | MUL  BYTE R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 41         | MUL  HALF R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 42         | MUL  WORD R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 43         | MUL  LONG R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 44         | DIV  BYTE R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- | DZ          |
+| 45         | DIV  HALF R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- | DZ          |
+| 46         | DIV  WORD R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- | DZ          |
+| 47         | DIV  LONG R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- | DZ          |
+| 48         | IMUL BYTE R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 49         | IMUL HALF R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 4A         | IMUL WORD R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 4B         | IMUL LONG R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- |             |
+| 4C         | IDIV BYTE R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- | DZ          |
+| 4D         | IDIV HALF R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- | DZ          |
+| 4E         | IDIV WORD R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- | DZ          |
+| 4F         | IDIV LONG R[A], R[B], R[C], I-12 | C - P Z S O - - - - - -- | DZ          |
+| 50         | STO  BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 51         | STO  HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 52         | STO  WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 53         | STO  LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 54         | SIP  BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 55         | SIP  HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 56         | SIP  WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 57         | SIP  LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 58         | LOD  BYTE R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 59         | LOD  HALF R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 5A         | LOD  WORD R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 5B         | LOD  LONG R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 5C         | LIP  BYTE R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 5D         | LIP  HALF R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 5E         | LIP  WORD R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 5F         | LIP  LONG R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 60         | OUT  BYTE R[A], R[B],       I-16 | - - - - - - - - - - - -- | PE PF OM GP |
+| 61         | OUT  HALF R[A], R[B],       I-16 | - - - - - - - - - - - -- | PE PF OM GP |
+| 62         | OUT  WORD R[A], R[B],       I-16 | - - - - - - - - - - - -- | PE PF OM GP |
+| 63         | OUT  LONG R[A], R[B],       I-16 | - - - - - - - - - - - -- | PE PF OM GP |
+| 64         | IN   BYTE R[A], R[B],       I-16 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 65         | IN   HALF R[A], R[B],       I-16 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 66         | IN   WORD R[A], R[B],       I-16 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 67         | IN   LONG R[A], R[B],       I-16 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \0      | CL        R[A], (B << 12) | U-12 | C 1 P Z S O D V T I U PL | GP          |
+| 68 \1      | ST        R[A], (B << 12) | U-12 | C 1 P Z S O D V T I U PL | GP          |
+| 68 \2      | SET[B]    R[A]                ?? | - - P Z S - - - - - - -- |             |
+| 68 \3      | SSR       R[A], (B << 12) | U-12 | C 1 P Z S O D V T I U PL | GP          |
+| 68 \4      | LSR       R[A], (B << 12) | U-12 | - - - - - - - - - - - -- |             |
+| 68 \5      | SCK       R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | GP          |
+| 68 \6      | LCK       R[A], (B << 12) | U-12 | - - - - - - - - - - - -- |             |
+| 68 \7      | INT       R[A],             I-12 | - - - - - - - - - I U PL | GP ??       |
+| 68 \8      | IRET                          ?? | - - - - - - - - - I U PL | GP          |
+| 68 \9 \000 | MOV  BYTE R[A], BYTE R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \001 | MOV  BYTE R[A], HALF R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \002 | MOV  BYTE R[A], WORD R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \003 | MOV  BYTE R[A], LONG R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \004 | MOV  BYTE C[A], BYTE C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \005 | MOV  BYTE C[A], HALF C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \006 | MOV  BYTE C[A], WORD C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \007 | MOV  BYTE C[A], LONG C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \008 | MOV  BYTE R[A], BYTE C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \009 | MOV  BYTE R[A], HALF C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \00A | MOV  BYTE R[A], WORD C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \00B | MOV  BYTE R[A], LONG C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \00C | MOV  BYTE C[A], BYTE R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \00D | MOV  BYTE C[A], HALF R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \00E | MOV  BYTE C[A], WORD R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \00F | MOV  BYTE C[A], LONG R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \010 | MOV  HALF R[A], BYTE R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \011 | MOV  HALF R[A], HALF R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \012 | MOV  HALF R[A], WORD R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \013 | MOV  HALF R[A], LONG R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \014 | MOV  HALF C[A], BYTE C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \015 | MOV  HALF C[A], HALF C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \016 | MOV  HALF C[A], WORD C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \017 | MOV  HALF C[A], LONG C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \018 | MOV  HALF R[A], BYTE C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \019 | MOV  HALF R[A], HALF C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \01A | MOV  HALF R[A], WORD C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \01B | MOV  HALF R[A], LONG C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \01C | MOV  HALF C[A], BYTE R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \01D | MOV  HALF C[A], HALF R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \01E | MOV  HALF C[A], WORD R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \01F | MOV  HALF C[A], LONG R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \020 | MOV  WORD R[A], BYTE R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \021 | MOV  WORD R[A], HALF R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \022 | MOV  WORD R[A], WORD R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \023 | MOV  WORD R[A], LONG R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \024 | MOV  WORD C[A], BYTE C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \025 | MOV  WORD C[A], HALF C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \026 | MOV  WORD C[A], WORD C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \027 | MOV  WORD C[A], LONG C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \028 | MOV  WORD R[A], BYTE C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \029 | MOV  WORD R[A], HALF C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \02A | MOV  WORD R[A], WORD C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \02B | MOV  WORD R[A], LONG C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \02C | MOV  WORD C[A], BYTE R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \02D | MOV  WORD C[A], HALF R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \02E | MOV  WORD C[A], WORD R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \02F | MOV  WORD C[A], LONG R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \030 | MOV  LONG R[A], BYTE R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \031 | MOV  LONG R[A], HALF R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \032 | MOV  LONG R[A], WORD R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \033 | MOV  LONG R[A], LONG R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \034 | MOV  LONG C[A], BYTE C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \035 | MOV  LONG C[A], HALF C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \036 | MOV  LONG C[A], WORD C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \037 | MOV  LONG C[A], LONG C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \038 | MOV  LONG R[A], BYTE C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \039 | MOV  LONG R[A], HALF C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \03A | MOV  LONG R[A], WORD C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \03B | MOV  LONG R[A], LONG C[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \03C | MOV  LONG C[A], BYTE R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \03D | MOV  LONG C[A], HALF R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \03E | MOV  LONG C[A], WORD R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \03F | MOV  LONG C[A], LONG R[B]        | - - P Z S - - - - - - -- |             |
+| 68 \9 \040 | XHG  BYTE R[A], R[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \041 | XHG  BYTE R[A], C[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \042 | XHG  BYTE C[A], R[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \043 | XHG  BYTE C[A], C[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \04? | -    BYTE R[A], R[B]             | - - - - - - - - - - - -- | UD          |
+| 68 \9 \050 | XHG  HALF R[A], R[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \051 | XHG  HALF R[A], C[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \052 | XHG  HALF C[A], R[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \053 | XHG  HALF C[A], C[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \05? | -    HALF R[A], R[B]             | - - - - - - - - - - - -- | UD          |
+| 68 \9 \060 | XHG  WORD R[A], R[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \061 | XHG  WORD R[A], C[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \062 | XHG  WORD C[A], R[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \063 | XHG  WORD C[A], C[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \06? | -    WORD R[A], R[B]             | - - - - - - - - - - - -- | UD          |
+| 68 \9 \070 | XHG  LONG R[A], R[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \071 | XHG  LONG R[A], C[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \072 | XHG  LONG C[A], R[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \073 | XHG  LONG C[A], C[B]             | - - - - - - - - - - - -- |             |
+| 68 \9 \07? | -    LONG R[A], R[B]             | - - - - - - - - - - - -- | UD          |
+| 68 \9 \??? | -         R[A], R[B]             | - - - - - - - - - - - -- | UD          |
+| 68 \A \000 | STOS BYTE R[A], R[B]             | - - - - - - - - - - - -- | PE PF OM GP |
+| 68 \A \001 | LODS BYTE R[A], R[B]             | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \A \002 | SCAS BYTE R[A], R[B]             | C - P Z S O - - - - - -- | PE PF OM GP |
+| 68 \A \003 | MOVS BYTE R[A], R[B]             | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \A \004 | CMPS BYTE R[A], R[B]             | C - P Z S O - - - - - -- | PE PF OM GP |
+| 68 \A \005 | OUTS BYTE R[A], R[B]             | - - - - - - - - - - - -- | PE PF OM GP |
+| 68 \A \006 | INS  BYTE R[A], R[B]             | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \A \007 | XHGS BYTE R[A], R[B]             | - - - - - - - - - - - -- | PE PF OM GP |
+| 68 \A \00? | -    BYTE R[A], R[B]             | - - - - - - - - - - - -- | UD          |
+| 68 \A \010 | STOS HALF R[A], R[B]             | - - - - - - - - - - - -- | PE PF OM GP |
+| 68 \A \011 | LODS HALF R[A], R[B]             | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \A \012 | SCAS HALF R[A], R[B]             | C - P Z S O - - - - - -- | PE PF OM GP |
+| 68 \A \013 | MOVS HALF R[A], R[B]             | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \A \014 | CMPS HALF R[A], R[B]             | C - P Z S O - - - - - -- | PE PF OM GP |
+| 68 \A \015 | OUTS HALF R[A], R[B]             | - - - - - - - - - - - -- | PE PF OM GP |
+| 68 \A \016 | INS  HALF R[A], R[B]             | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \A \017 | XHGS HALF R[A], R[B]             | - - - - - - - - - - - -- | PE PF OM GP |
+| 68 \A \01? | -    HALF R[A], R[B]             | - - - - - - - - - - - -- | UD          |
+| 68 \A \020 | STOS WORD R[A], R[B]             | - - - - - - - - - - - -- | PE PF OM GP |
+| 68 \A \021 | LODS WORD R[A], R[B]             | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \A \022 | SCAS WORD R[A], R[B]             | C - P Z S O - - - - - -- | PE PF OM GP |
+| 68 \A \023 | MOVS WORD R[A], R[B]             | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \A \024 | CMPS WORD R[A], R[B]             | C - P Z S O - - - - - -- | PE PF OM GP |
+| 68 \A \025 | OUTS WORD R[A], R[B]             | - - - - - - - - - - - -- | PE PF OM GP |
+| 68 \A \026 | INS  WORD R[A], R[B]             | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \A \027 | XHGS WORD R[A], R[B]             | - - - - - - - - - - - -- | PE PF OM GP |
+| 68 \A \02? | -    WORD R[A], R[B]             | - - - - - - - - - - - -- | UD          |
+| 68 \A \030 | STOS LONG R[A], R[B]             | - - - - - - - - - - - -- | PE PF OM GP |
+| 68 \A \031 | LODS LONG R[A], R[B]             | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \A \032 | SCAS LONG R[A], R[B]             | C - P Z S O - - - - - -- | PE PF OM GP |
+| 68 \A \033 | MOVS LONG R[A], R[B]             | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \A \034 | CMPS LONG R[A], R[B]             | C - P Z S O - - - - - -- | PE PF OM GP |
+| 68 \A \035 | OUTS LONG R[A], R[B]             | - - - - - - - - - - - -- | PE PF OM GP |
+| 68 \A \036 | INS  LONG R[A], R[B]             | - - P Z S - - - - - - -- | PE PF OM GP |
+| 68 \A \037 | XHGS LONG R[A], R[B]             | - - - - - - - - - - - -- | PE PF OM GP |
+| 68 \A \03? | -    LONG R[A], R[B]             | - - - - - - - - - - - -- | UD          |
+| 68 \A \??? | -         R[A], R[B]             | - - - - - - - - - - - -- | UD          |
+| 68 \B      | LVA  NEAR R[A], R[B],       I-12 | - - P Z S - - - - - - -- |             |
+| 68 \C      | BSWP BYTE R[A], R[B],       I-12 | - - P Z S - - - - - - -- |             |
+| 68 \D      | BSWP HALF R[A], R[B],       I-12 | - - P Z S - - - - - - -- |             |
+| 68 \E      | BSWP WORD R[A], R[B],       I-12 | - - P Z S - - - - - - -- |             |
+| 68 \F      | BSWP LONG R[A], R[B],       I-12 | - - P Z S - - - - - - -- |             |
+| 68 \C      | -    BYTE R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 68 \D      | -    HALF R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 68 \E      | -    WORD R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 68 \F      | -    LONG R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 69         | LVA       R[A], R[B], R[C], I-12 | - - P Z S - - - - - - -- |             |
+| 6A         | LPA       R[A], R[B],       I-16 | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6B         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 6C \0      | PUSH BYTE R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | PE PF OM GP | C[0:15]
+| 6C \1      | PUSH BYTE R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | PE PF OM GP | R[0:15]
+| 6C \2      | PUSH BYTE R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | PE PF OM GP | F[0:15]
+| 6C \3      | -    BYTE R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 6C \4      | PUSH BYTE R[A], C[B],       I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 6C \5      | PUSH BYTE R[A], R[B],       I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 6C \6      | PUSH BYTE R[A], F[B],       I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 6C \7      | -    BYTE R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 6C \8      | PUSH HALF R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | PE PF OM GP | C[0:15]
+| 6C \9      | PUSH HALF R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | PE PF OM GP | R[0:15]
+| 6C \A      | PUSH HALF R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | PE PF OM GP | F[0:15]
+| 6C \B      | -    HALF R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 6C \C      | PUSH HALF R[A], C[B],       I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 6C \D      | PUSH HALF R[A], R[B],       I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 6C \E      | PUSH HALF R[A], F[B],       I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 6C \F      | -    HALF R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 6D \0      | PUSH WORD R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | PE PF OM GP | C[0:15]
+| 6D \1      | PUSH WORD R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | PE PF OM GP | R[0:15]
+| 6D \2      | PUSH WORD R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | PE PF OM GP | F[0:15]
+| 6D \3      | -    WORD R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 6D \4      | PUSH WORD R[A], C[B],       I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 6D \5      | PUSH WORD R[A], R[B],       I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 6D \6      | PUSH WORD R[A], F[B],       I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 6D \7      | -    WORD R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 6D \8      | PUSH LONG R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | PE PF OM GP | C[0:15]
+| 6D \9      | PUSH LONG R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | PE PF OM GP | R[0:15]
+| 6D \A      | PUSH LONG R[A], (B << 12) | U-12 | - - - - - - - - - - - -- | PE PF OM GP | F[0:15]
+| 6D \B      | -    LONG R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 6D \C      | PUSH LONG R[A], C[B],       I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 6D \D      | PUSH LONG R[A], R[B],       I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 6D \E      | PUSH LONG R[A], F[B],       I-12 | - - - - - - - - - - - -- | PE PF OM GP |
+| 6D \F      | -    LONG R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 6E \0      | POP  BYTE R[A], (B << 12) | U-12 | - - P Z S - - - - - - -- | PE PF OM GP | C[0:15]
+| 6E \1      | POP  BYTE R[A], (B << 12) | U-12 | - - P Z S - - - - - - -- | PE PF OM GP | R[0:15]
+| 6E \2      | POP  BYTE R[A], (B << 12) | U-12 | - - P Z S - - - - - - -- | PE PF OM GP | F[0:15]
+| 6E \3      | -    BYTE R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 6E \4      | POP  BYTE R[A], C[B]          ?? | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6E \5      | POP  BYTE R[A], R[B]          ?? | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6E \6      | POP  BYTE R[A], F[B]          ?? | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6E \7      | -    BYTE R[A], R[B]          ?? | - - - - - - - - - - - -- | UD          |
+| 6E \8      | POP  HALF R[A], (B << 12) | U-12 | - - P Z S - - - - - - -- | PE PF OM GP | C[0:15]
+| 6E \9      | POP  HALF R[A], (B << 12) | U-12 | - - P Z S - - - - - - -- | PE PF OM GP | R[0:15]
+| 6E \A      | POP  HALF R[A], (B << 12) | U-12 | - - P Z S - - - - - - -- | PE PF OM GP | F[0:15]
+| 6E \B      | -    HALF R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 6E \C      | POP  HALF R[A], C[B]          ?? | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6E \D      | POP  HALF R[A], R[B]          ?? | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6E \E      | POP  HALF R[A], F[B]          ?? | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6E \F      | -    HALF R[A], R[B]          ?? | - - - - - - - - - - - -- | UD          |
+| 6F \0      | POP  WORD R[A], (B << 12) | U-12 | - - P Z S - - - - - - -- | PE PF OM GP | C[0:15]
+| 6F \1      | POP  WORD R[A], (B << 12) | U-12 | - - P Z S - - - - - - -- | PE PF OM GP | R[0:15]
+| 6F \2      | POP  WORD R[A], (B << 12) | U-12 | - - P Z S - - - - - - -- | PE PF OM GP | F[0:15]
+| 6F \3      | -    WORD R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 6F \4      | POP  WORD R[A], C[B]          ?? | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6F \5      | POP  WORD R[A], R[B]          ?? | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6F \6      | POP  WORD R[A], F[B]          ?? | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6F \7      | -    WORD R[A], R[B]          ?? | - - - - - - - - - - - -- | UD          |
+| 6F \8      | POP  LONG R[A], (B << 12) | U-12 | - - P Z S - - - - - - -- | PE PF OM GP | C[0:15]
+| 6F \9      | POP  LONG R[A], (B << 12) | U-12 | - - P Z S - - - - - - -- | PE PF OM GP | R[0:15]
+| 6F \A      | POP  LONG R[A], (B << 12) | U-12 | - - P Z S - - - - - - -- | PE PF OM GP | F[0:15]
+| 6F \B      | -    LONG R[A], R[B],       I-12 | - - - - - - - - - - - -- | UD          |
+| 6F \C      | POP  LONG R[A], C[B]          ?? | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6F \D      | POP  LONG R[A], R[B]          ?? | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6F \E      | POP  LONG R[A], F[B]          ?? | - - P Z S - - - - - - -- | PE PF OM GP |
+| 6F \F      | -    LONG R[A], R[B]          ?? | - - - - - - - - - - - -- | UD          |
+| 70         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 71         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 72         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 73         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 74         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 75         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 76         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 77         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 78         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 79         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 7A         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 7B         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 7C         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 7D         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 7E         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 7F         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 80         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 81         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 82         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 83         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 84         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 85         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 86         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 87         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 88         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 89         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 8A         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 8B         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 8C         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 8D         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 8E         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 8F         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 90         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 91         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 92         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 93         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 94         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 95         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 96         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 97         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 98         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 99         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 9A         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 9B         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 9C         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 9D         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 9E         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| 9F         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| A0         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| A1         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| A2         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| A3         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| A4         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| A5         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| A6         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| A7         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| A8         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| A9         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| AA         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| AB         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| AC         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| AD         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| AE         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| AF         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| B0         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| B1         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| B2         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| B3         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| B4         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| B5         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| B6         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| B7         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| B8         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| B9         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| BA         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| BB         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| BC         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| BD         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| BE         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| BF         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| C0         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| C1         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| C2         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| C3         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| C4         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| C5         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| C6         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| C7         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| C8         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| C9         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| CA         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| CB         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| CC         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| CD         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| CE         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| CF         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| D0         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| D1         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| D2         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| D3         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| D4         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| D5         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| D6         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| D7         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| D8         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| D9         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| DA         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| DB         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| DC         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| DD         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| DE         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| DF         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| E0         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| E1         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| E2         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| E3         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| E4         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| E5         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| E6         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| E7         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| E8         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| E9         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| EA         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| EB         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| EC         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| ED         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| EE         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| EF         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| F0         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| F1         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| F2         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| F3         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| F4         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| F5         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| F6         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| F7         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| F8         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| F9         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| FA         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| FB         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| FC         | -    BYTE R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| FD         | -    HALF R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| FE         | -    WORD R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+| FF         | -    LONG R[A], R[B], R[C], I-12 | - - - - - - - - - - - -- | UD          |
+'----------------------------------------------------------------------------------------'
